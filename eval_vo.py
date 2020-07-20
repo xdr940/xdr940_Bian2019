@@ -13,9 +13,9 @@ parser = argparse.ArgumentParser(description='Script for PoseNet testing with co
 
 parser.add_argument("--img-height", default=256, type=int, help="Image height")
 parser.add_argument("--img-width", default=832, type=int, help="Image width")
-parser.add_argument("--posenet",default="/home/roit/models/SCBian/exp_pose_model_best.pth.tar")
+parser.add_argument("--posenet",default="/home/roit/models/SCBian/cs+k_pose.tar")
 
-parser.add_argument("--dataset-dir", type=str, default="/media/roit/hard_disk_2/Datasets/kitti_odometry_color/")
+parser.add_argument("--dataset-dir", type=str, default="/media/roit/greenp2/datasets/kitti_odo_color/")
 parser.add_argument('--sequence-length', type=int, metavar='N',
                     help='sequence length for testing', default=5)
 parser.add_argument(

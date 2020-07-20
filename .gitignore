@@ -7,6 +7,8 @@ __pycache__\
 *.npy
 *.png
 *.jpg
+__pycache__
+*.txt
 .\eigen_test_out_id_var_mean
 .\eigen_test_out_official
 .\eigen_test_fullwitherodil

@@ -64,3 +64,12 @@ def save_checkpoint(save_path, dispnet_state, exp_pose_state, is_best, filename=
         for prefix in file_prefixes:
             shutil.copyfile(save_path/'{}_{}'.format(prefix, filename),
                             save_path/'{}_model_best.pth.tar'.format(prefix))
+
+
+
+def readlines(filename):
+    """Read all the lines in a text file and return as a list
+    """
+    with open(filename, 'r') as f:
+        lines = f.read().splitlines()
+    return lines

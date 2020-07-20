@@ -20,17 +20,21 @@ parser.add_argument("--pretrained-posenet",
                     #default='/home/roit/models/SCBian/dispnet_model_best.pth'
                     default='/home/roit/models/SCBian/k_pose.tar'
                     )
+parser.add_argument('--scale_factor',default=32.4)
 
 parser.add_argument("--img-height", default=256, type=int, help="Image height")
 parser.add_argument("--img-width", default=832, type=int, help="Image width")
 parser.add_argument("--dataset-dir", type=str, help="Dataset directory",
-                    default='/media/roit/hard_disk_2/Datasets/kitti_odometry_color/sequences/')
+                    #default='/mnt/datasets/kitti_odo_gray/dataset/sequences/'
+                    default='/media/roit/greenp2/datasets/kitti_odo_color/sequences/'
+                    )
 parser.add_argument("--output-dir", type=str,
                     help="Output directory for saving predictions in a big 3D numpy file",
-                    default='.')
+                    default='./')
 parser.add_argument("--img-exts", default=['png', 'jpg', 'bmp'],
                     nargs='*', type=str, help="images extensions to glob")
-parser.add_argument("--sequence", default='03',
+parser.add_argument('--type',default='color',choices=['gray','color'])
+parser.add_argument("--sequence", default='05',
                     type=str, help="sequence to test")
 
 device = torch.device(
@@ -57,8 +61,11 @@ def main():
     pose_net = models.PoseNet().to(device)
     pose_net.load_state_dict(weights_pose['state_dict'], strict=False)
     pose_net.eval()
+    if args.type =='gray':
+        image_dir = Path(args.dataset_dir + args.sequence + "/image_1/")#gray 01, color 23
+    else:
+        image_dir = Path(args.dataset_dir + args.sequence + "/image_2/")#gray 01, color 23
 
-    image_dir = Path(args.dataset_dir + args.sequence + "/image_2/")
     output_dir = Path(args.output_dir)
     print('-> out dif {}'.format(output_dir))
     output_dir.makedirs_p()
@@ -78,15 +85,23 @@ def main():
         tensor_img2 = load_tensor_image(test_files[iter+1], args)
         pose = pose_net(tensor_img1, tensor_img2)
         pose_mat = pose_vec2mat(pose).squeeze(0).cpu().numpy()#1,6-->3x4
+
+
         pose_mat = np.vstack([pose_mat, np.array([0, 0, 0, 1])])#4X4
         global_pose = global_pose @ np.linalg.inv(pose_mat)
 
-        poses.append(global_pose[0:3, :].reshape(1, 12))
+        pose = global_pose[0:3, :].reshape(1, 12)
+
+
+        poses.append(pose)
 
         # update
         tensor_img1 = tensor_img2
 
     poses = np.concatenate(poses, axis=0)
+    if args.scale_factor:
+            poses[:,3]*=args.scale_factor#x-axis
+            poses[:,11]*=args.scale_factor#z-axis
     filename = Path(args.output_dir + args.sequence + ".txt")
     np.savetxt(filename, poses, delimiter=' ', fmt='%1.8e')
 

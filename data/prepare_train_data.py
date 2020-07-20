@@ -7,7 +7,7 @@ from tqdm import tqdm
 from path import Path
 
 parser = argparse.ArgumentParser()
-parser.add_argument("dataset_dir", metavar='DIR',
+parser.add_argument("--dataset_dir", default='/mnt/home/roit/datasets/kitti',
                     help='path to original dataset')
 parser.add_argument("--dataset-format", type=str, default='kitti_raw', choices=["kitti_raw", "cityscapes", "kitti_odom"])
 parser.add_argument("--static-frames", default=None,
@@ -19,7 +19,7 @@ parser.add_argument("--with-pose", action='store_true',
                     help="If available (e.g. with KITTI), will store pose ground truth along with images, for validation")
 parser.add_argument("--no-train-gt", action='store_true',
                     help="If selected, will delete ground truth depth to save space")
-parser.add_argument("--dump-root", type=str, default='dump', help="Where to dump the data")
+parser.add_argument("--dump-root", type=str, default='dump', help="/home/roit/datasets/kitti_preprocess")
 parser.add_argument("--height", type=int, default=128, help="image height")
 parser.add_argument("--width", type=int, default=416, help="image width")
 parser.add_argument("--depth-size-ratio", type=int, default=1, help="will divide depth size by that ratio")

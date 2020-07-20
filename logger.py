@@ -19,7 +19,7 @@ class TermLogger(object):
         for i in range(10):
             print('')
         self.epoch_bar = progressbar.ProgressBar(
-            max_value=n_epochs, fd=Writer(self.t, (0, h-s+e)))
+            maxval=n_epochs, fd=Writer(self.t, (0, h-s+e)))
 
         self.train_writer = Writer(self.t, (0, h-s+tr))
         self.train_bar_writer = Writer(self.t, (0, h-s+tr+1))
@@ -32,11 +32,11 @@ class TermLogger(object):
 
     def reset_train_bar(self):
         self.train_bar = progressbar.ProgressBar(
-            max_value=self.train_size, fd=self.train_bar_writer)
+            maxval=self.train_size, fd=self.train_bar_writer)
 
     def reset_valid_bar(self):
         self.valid_bar = progressbar.ProgressBar(
-            max_value=self.valid_size, fd=self.valid_bar_writer)
+            maxval=self.valid_size, fd=self.valid_bar_writer)
 
 
 class Writer(object):

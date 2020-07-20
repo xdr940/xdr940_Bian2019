@@ -51,8 +51,8 @@ class PoseNet(nn.Module):
         out_conv7 = self.conv7(out_conv6)#out_conv6.shape = 1,256,4,13
         pose = self.pose_pred(out_conv7)#out_conv7.shape = 1,256,2,7, pose.shape = 1,6,2,7
         pose = pose.mean(3).mean(2)#pose.shape=1,6
-        #pose = 0.01 * pose.view(pose.size(0), 6)#
-        pose = 0.01 * pose.reshape(1, 6)#
+        pose = 0.01 * pose.view(pose.size(0), 6)#
+        #pose = 0.01 * pose.reshape(1, 6)#
 
  
         return pose
